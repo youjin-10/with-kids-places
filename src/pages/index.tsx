@@ -1,25 +1,11 @@
 import Head from "next/head";
-import Image from "next/image";
 import { useState } from "react";
 import { PLACE_TYPES } from "@/constant";
-import {
-  Badge,
-  Box,
-  Card,
-  CardBody,
-  Link,
-  ListIcon,
-  ListItem,
-  OrderedList,
-  Tab,
-  TabList,
-  Tabs,
-  Text,
-} from "@chakra-ui/react";
-import { Map, MapMarker, useMap } from "react-kakao-maps-sdk";
-import useKakaoLoader from "@/hooks/useKakaoLoader";
+import { Tab, TabList, Tabs } from "@chakra-ui/react";
 import { PlaceData } from "@/types";
-import { getPlaceTypeKor } from "@/rules";
+import Notice from "@/components/Notice";
+import MapContainer from "@/components/map/MapContainer";
+import PlaceDataCardList from "@/components/PlaceDataCardList";
 
 const places: PlaceData[] = [
   {
@@ -392,132 +378,10 @@ export default function Home() {
           </TabList>
         </Tabs>
 
-        <Box height={40} overflowY="scroll" p={4} mb={4}>
-          <Text fontWeight="semibold">총 {filteredPlaces.length} 곳</Text>
-
-          {filteredPlaces.map((p, i) => {
-            return (
-              <Card my={2}>
-                <CardBody>
-                  <Link
-                    href={`https://map.kakao.com/link/search/성동구 ${p.name}`}
-                    target="_blank"
-                  >
-                    <Text fontWeight="semibold" textDecorationLine="underline">
-                      {p.name}
-                    </Text>
-                  </Link>
-
-                  <Text fontSize="sm" mb={2}>
-                    📍 {p.address}
-                  </Text>
-                  <Text color="gray.600" fontSize="sm">
-                    대표메뉴: {p.mainMenu}
-                  </Text>
-                  <Text color="gray.600" fontSize="sm">
-                    {p.discountMenu} {p.discountAmount} 할인
-                  </Text>
-                </CardBody>
-              </Card>
-            );
-          })}
-        </Box>
+        <PlaceDataCardList placeList={filteredPlaces} />
 
         <MapContainer places={filteredPlaces} />
       </main>
     </>
   );
 }
-
-const Notice = () => {
-  return (
-    <Box bg="red.100" p={3} borderRadius="lg" my={4}>
-      <Text fontWeight="bold">📣 참고해주세요!</Text>
-      <OrderedList fontSize="sm">
-        <ListItem>
-          <Link
-            href="https://www.sd.go.kr/health/contents.do?key=2432&"
-            textDecorationLine="underline"
-            target="_blank"
-          >
-            성동구청 홈페이지에 올라온 웰컴키즈존 업장들을
-          </Link>
-          (링크) 조금 더 보기 쉽게 개인이 만든 페이지 입니다.
-        </ListItem>
-        <ListItem>
-          메뉴, 할인 등 식당 정보는 성동구청 홈페이지를 기반으로 만든 것입니다.
-        </ListItem>
-        <ListItem>
-          관련하여 문의가 필요한 경우, 성동구청이나 업장에 직접 문의 부탁
-          드립니다.
-        </ListItem>
-      </OrderedList>
-    </Box>
-  );
-};
-
-const MapMarkerContent = ({ place }: { place: PlaceData }) => {
-  return (
-    <Box p={2}>
-      <Badge>{getPlaceTypeKor(place.type)}</Badge>
-
-      <Text fontSize="sm" fontWeight="semibold">
-        {place.name}
-      </Text>
-
-      <Text fontSize="xs">
-        {place.discountMenu} {place.discountAmount} 할인
-      </Text>
-    </Box>
-  );
-};
-
-const MapContainer = ({ places }: { places: PlaceData[] }) => {
-  useKakaoLoader();
-
-  const handleClickMarker = (placeName: string) => {
-    window.open(`https://map.kakao.com/link/search/성동구 ${placeName}`);
-  };
-
-  return (
-    <Map
-      center={{ lat: 37.5634272053432, lng: 127.036930141185 }} // 성동구청
-      style={{ width: "100%", height: "380px" }}
-      level={7}
-    >
-      {places.map((place) => {
-        return (
-          <EventMarkerContainer
-            key={`EventMarkerContainer-${place.latitude}-${place.longitude}`}
-            position={{ lat: place.latitude, lng: place.longitude }}
-            content={<MapMarkerContent place={place} />}
-            onClickMarker={() => handleClickMarker(place.name)}
-          />
-        );
-      })}
-    </Map>
-  );
-};
-
-const EventMarkerContainer = ({
-  position,
-  content,
-  onClickMarker,
-}: {
-  position: { lat: any; lng: any }; // 데이터는 string이고 number로 치환하면 마커가 보이지 않음. any 처리.
-  content: JSX.Element;
-  onClickMarker: any;
-}) => {
-  const [isVisible, setIsVisible] = useState(false);
-
-  return (
-    <MapMarker
-      position={position}
-      onMouseOver={() => setIsVisible(true)}
-      onMouseOut={() => setIsVisible(false)}
-      onClick={onClickMarker}
-    >
-      {isVisible && content}
-    </MapMarker>
-  );
-};
