@@ -6,7 +6,7 @@ const PlaceDataCard = ({ place }: { place: PlaceData }) => {
     <Card my={2}>
       <CardBody>
         <Link
-          href={`https://map.kakao.com/link/search/성동구 ${p.name}`}
+          href={`https://map.kakao.com/link/search/성동구 ${place.name}`}
           target="_blank"
         >
           <Text fontWeight="semibold" textDecorationLine="underline">
