@@ -4,4 +4,5 @@ export const PLACE_TYPES = {
   CHINESE: "chinese",
   JAPANESE: "japanese",
   CAFE: "cafe",
+  BAKERY: "bakery"
 };
