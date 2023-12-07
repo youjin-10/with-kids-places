@@ -584,7 +584,7 @@ export default function Home() {
               일식
             </Tab>
             <Tab onClick={() => handleClickType(PLACE_TYPES.CAFE)}>카페</Tab>
-            <Tab onClick={() => handleClickType(PLACE_TYPES.BAKERY)}>베이커리</Tab>
+            {/* <Tab onClick={() => handleClickType(PLACE_TYPES.BAKERY)}>베이커리</Tab> */}
           </TabList>
         </Tabs>
 
