@@ -6,4 +6,4 @@
 
 ## Project Introduction
 - A simple webpage that users can see the list of kids-friendly stores with map.
-- The list of kid-friendly stores is from Seongdong-gu district office homepage.
+- The list of kid-friendly stores is from [Seongdong-gu district office homepage](https://www.sd.go.kr/health/contents.do?key=2432).
